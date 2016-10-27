@@ -8,7 +8,23 @@
 #define SIZE_X 10
 #define SIZE_Y 10
 
-int main() {
+int main(int argc, const char *args[]) {
+    sf::Texture texture;
+    sf::RenderStates state;
+
+    bool usingTexture = false;
+
+    int width = 0;
+    int height = 0;
+
+    if (argc > 1 && texture.loadFromFile(args[1])) {
+        width = texture.getSize().x;
+        height = texture.getSize().y;
+
+        state.texture = &texture;
+        std::cout << "Using texture: " << args[1] << std::endl;
+    }
+
 	sf::RenderWindow window(sf::VideoMode(640, 480), "Image Fabric Sim");
     window.setVerticalSyncEnabled(true);
 
@@ -19,7 +35,7 @@ int main() {
 
     for (int y = 0; y < SIZE_Y; y++) {
         for (int x = 0; x < SIZE_X; x++) {
-            Point *vertex = new Point(x * 20.0f + 32.0f, y * 20.0f + 32.0f);
+            Point *vertex = new Point(x * 20.0f + 250.0f, y * 20.0f + 32.0f);
 
             if ((x == (SIZE_X - 1) || x == 0) && y == 0) {
                 vertex->setStatic(true);
@@ -83,22 +99,40 @@ int main() {
 
         int i = 0;
 
+        float ratioX = width / ((SIZE_X) * 20.0f);
+        float ratioY = height / ((SIZE_Y) * 20.0f);
         
         for (unsigned int y = 0; y < SIZE_Y - 1; y++) {
             for (unsigned int x = 0; x < SIZE_X - 1; x++) {
                 vertices[i] = points[y * SIZE_X + x]->getPosition();
+                vertices[i].texCoords.x = (x * 20.0f) * ratioX;
+                vertices[i].texCoords.y = (y * 20.0f) * ratioY;
+
                 vertices[++i] = points[(y + 1) * SIZE_X + x]->getPosition();
+                vertices[i].texCoords.x = (x * 20.0f) * ratioX;
+                vertices[i].texCoords.y = ((y + 1) * 20.0f) * ratioY;
+
                 vertices[++i] = points[(y + 1) * SIZE_X + x + 1]->getPosition();
+                vertices[i].texCoords.x = ((x + 1) * 20.0f) * ratioX;
+                vertices[i].texCoords.y = ((y + 1) * 20.0f) * ratioY;
+
                 vertices[++i] = points[y * SIZE_X + x]->getPosition();
+                vertices[i].texCoords.x = (x * 20.0f) * ratioX;
+                vertices[i].texCoords.y = (y * 20.0f) * ratioY;
+
                 vertices[++i] = points[y * SIZE_X + x + 1]->getPosition();
+                vertices[i].texCoords.x = ((x + 1) * 20.0f) * ratioX;
+                vertices[i].texCoords.y = (y * 20.0f) * ratioY;
+
                 vertices[++i] = points[(y + 1) * SIZE_X + x + 1]->getPosition();
+                vertices[i].texCoords.x = ((x + 1) * 20.0f) * ratioX;
+                vertices[i].texCoords.y = ((y + 1) * 20.0f) * ratioY;
 
                 i++;
             }
         }
 
-        window.draw(vertices);
-
+        window.draw(vertices, state);
 		window.display();
 	}
 

@@ -7,7 +7,6 @@ class Point
 	private:
 		sf::Vector2f position;
 		sf::Vector2f lastPosition;
-        sf::CircleShape shape;
         bool staticPoint;
 
 	public:
@@ -16,7 +15,6 @@ class Point
         Point(float x, float y, float velocityX, float velocityY);
 		const sf::Vector2f &getPosition() const;
 		void update(float deltaTime);
-        void draw(sf::RenderWindow &window);
         void move(float deltaX, float deltaY, bool force = false);
         void constrain(float deltaTime);
         void setStatic(bool isStatic);

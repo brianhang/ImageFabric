@@ -1,13 +1,11 @@
 #include "point.h"
 
 #define DOUBLE 2
-#define FRICTION 0.99f
-#define GRAVITY 0.98f
+#define FRICTION 0.95f
+#define GRAVITY 0.5f
 
 #define POINT_RADIUS 0.5f
 #define BOUNCINESS 0.0f
-
-#include <iostream>
 
 Point::Point() : Point(0.0f, 0.0f) { }
 
@@ -15,11 +13,6 @@ Point::Point(float x, float y) {
 	position = sf::Vector2f(x, y);
 	lastPosition = position;
     staticPoint = false;
-
-    shape.setPosition(position);
-    shape.setOrigin(sf::Vector2f(POINT_RADIUS, POINT_RADIUS));
-    shape.setRadius(POINT_RADIUS);
-    shape.setFillColor(sf::Color::White);
 }
 
 Point::Point(float x, float y, float velocityX, float velocityY) :
@@ -47,13 +40,6 @@ void Point::update(float deltaTime) {
     position.y += velocityY + GRAVITY;
 
     constrain(deltaTime);
-
-    shape.setPosition(position);
-}
-
-void Point::draw(sf::RenderWindow &window) {
-    //shape.setRadius(10.0f);
-    window.draw(shape);
 }
 
 void Point::setStatic(bool isStatic) {
