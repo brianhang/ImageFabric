@@ -5,12 +5,12 @@
 class Stick
 {
     private:
-        Point &start;
-        Point &end;
+        Point *start;
+        Point *end;
         float length;
 
     public:
-        Stick(Point &newStart, Point &newEnd);
+        Stick(Point *newStart, Point *newEnd);
         void constrain(float deltaTime);
 };
 

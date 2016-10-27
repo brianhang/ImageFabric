@@ -1,8 +1,11 @@
 #include "point.h"
 
 #define DOUBLE 2
-#define FRICTION 0.5f
-#define GRAVITY 0.2f
+#define FRICTION 0.99f
+#define GRAVITY 0.98f
+
+#define POINT_RADIUS 0.5f
+#define BOUNCINESS 0.0f
 
 #include <iostream>
 
@@ -11,10 +14,11 @@ Point::Point() : Point(0.0f, 0.0f) { }
 Point::Point(float x, float y) {
 	position = sf::Vector2f(x, y);
 	lastPosition = position;
+    staticPoint = false;
 
     shape.setPosition(position);
-    shape.setOrigin(sf::Vector2f(8.0f, 8.0f));
-    shape.setRadius(8.0f);
+    shape.setOrigin(sf::Vector2f(POINT_RADIUS, POINT_RADIUS));
+    shape.setRadius(POINT_RADIUS);
     shape.setFillColor(sf::Color::White);
 }
 
@@ -29,6 +33,10 @@ const sf::Vector2f &Point::getPosition() const {
 }
 
 void Point::update(float deltaTime) {
+    if (staticPoint) {
+        return;
+    }
+
     float velocityX = (position.x - lastPosition.x) * FRICTION;
     float velocityY = (position.y - lastPosition.y) * FRICTION;
 
@@ -38,21 +46,7 @@ void Point::update(float deltaTime) {
     position.x += velocityX;
     position.y += velocityY + GRAVITY;
 
-    if (position.x > 632.0f) {
-        position.x = 632.0f;
-        lastPosition.x += velocityX;
-    } else if (position.x < 8.0f) {
-        position.x = 8.0f;
-        lastPosition.x += velocityX;
-    }
-
-    if (position.y > 472.0f) {
-        position.y = 472.0f;
-        lastPosition.y += velocityY;
-    } else if (position.y < 8.0f) {
-        position.y = 8.0f;
-        lastPosition.y += velocityY;
-    }
+    constrain(deltaTime);
 
     shape.setPosition(position);
 }
@@ -62,6 +56,37 @@ void Point::draw(sf::RenderWindow &window) {
     window.draw(shape);
 }
 
+void Point::setStatic(bool isStatic) {
+    staticPoint = isStatic;
+}
+
+void Point::constrain(float deltaTime) {
+    if (staticPoint) {
+        return;
+    }
+
+    float velocityX = (position.x - lastPosition.x) * FRICTION;
+    float velocityY = (position.y - lastPosition.y) * FRICTION;
+
+    if (position.x > (640.0f - POINT_RADIUS)) {
+        position.x = 640.0f - POINT_RADIUS;
+        lastPosition.x += velocityX * BOUNCINESS;
+    }
+    else if (position.x < POINT_RADIUS) {
+        position.x = POINT_RADIUS;
+        lastPosition.x += velocityX * BOUNCINESS;
+    }
+
+    if (position.y > (480.0f - POINT_RADIUS)) {
+        position.y = 480.0f - POINT_RADIUS;
+        lastPosition.y += velocityY * BOUNCINESS;
+    }
+    else if (position.y < POINT_RADIUS) {
+        position.y = POINT_RADIUS;
+        lastPosition.y += velocityY * BOUNCINESS;
+    }
+}
+
 float Point::distSqr(const Point &other) {
     const sf::Vector2f &otherPos = other.getPosition();
 
@@ -69,7 +94,16 @@ float Point::distSqr(const Point &other) {
            (position.y - otherPos.y) * (position.y - otherPos.y);
 }
 
-void Point::move(float deltaX, float deltaY) {
+void Point::move(float deltaX, float deltaY, bool force) {
+    if (!force && staticPoint) {
+        return;
+    }
+
     position.x += deltaX;
     position.y += deltaY;
+}
+
+void Point::setPosition(const sf::Vector2f &newPosition) {
+    position = newPosition;
+    lastPosition = newPosition;
 }
