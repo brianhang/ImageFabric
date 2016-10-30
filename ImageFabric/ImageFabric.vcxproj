@@ -117,11 +117,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cloth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="point.cpp" />
     <ClCompile Include="stick.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cloth.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="stick.h" />
   </ItemGroup>

@@ -24,12 +24,18 @@
     <ClCompile Include="stick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cloth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cloth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

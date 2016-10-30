@@ -1,10 +1,14 @@
-#include "stick.h"
+ #include "stick.h"
 
+// Constructor for the Stick class. Assigns the start and end points and sets
+// the desired distance to the initial distance between the two points.
 Stick::Stick(Point *newStart, Point *newEnd) : start(newStart), end(newEnd) {
     length = start->distSqr(*newEnd);
 }
 
-void Stick::constrain(float deltaTime) {
+// Moves the endpoints of the stick towards/away from each other to maintain
+// the desired length.
+void Stick::constrain() {
     const sf::Vector2f &startPos = start->getPosition();
     const sf::Vector2f &endPos = end->getPosition();
 
