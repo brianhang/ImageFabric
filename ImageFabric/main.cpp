@@ -21,31 +21,31 @@ int main(int argc, const char *args[]) {
     cloth.getPoint(0, 0)->setStatic(true);
     cloth.getPoint(9, 0)->setStatic(true);
 
-	while (window.isOpen()) {
-		sf::Event e;
+    while (window.isOpen()) {
+        sf::Event e;
 
-		while (window.pollEvent(e)) {
+        while (window.pollEvent(e)) {
             switch (e.type) {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                case sf::Event::MouseMoved:
-                    // Move the top left corner to the mouse.
-                    Point *corner = cloth.getPoint(0, 0);
-                    corner->setPosition(sf::Vector2f(e.mouseMove.x, e.mouseMove.y));
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::MouseMoved:
+                // Move the top left corner to the mouse.
+                Point *corner = cloth.getPoint(0, 0);
+                corner->setPosition(sf::Vector2f(e.mouseMove.x, e.mouseMove.y));
 
-                    break;
+                break;
             }
-		}
+        }
 
-		window.clear();
+        window.clear();
 
         // Simulate and draw the cloth.
         cloth.update();
         cloth.draw(window);
-        
-		window.display();
-	}
 
-	return 0;
+        window.display();
+    }
+
+    return 0;
 }
